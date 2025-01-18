@@ -1,6 +1,11 @@
 @CleanArchCQRS.API_HostAddress = http://localhost:5130
 
-GET {{CleanArchCQRS.API_HostAddress}}/weatherforecast/
+GET {{CleanArchCQRS.API_HostAddress}}/mangas
+Accept: application/json
+
+###
+
+GET {{CleanArchCQRS.API_HostAddress}}/mangas/1
 Accept: application/json
 
 ###
