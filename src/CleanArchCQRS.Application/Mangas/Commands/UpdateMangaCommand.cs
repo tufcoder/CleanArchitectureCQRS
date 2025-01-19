@@ -1,18 +1,40 @@
-﻿using CleanArchCQRS.Domain.Models;
-using CleanArchCQRS.Domain.Models.Enums;
+﻿using CleanArchCQRS.Domain.Abstractions;
+using CleanArchCQRS.Domain.Models;
 
 using MediatR;
 
 namespace CleanArchCQRS.Application.Mangas.Commands;
 
-public sealed class UpdateMangaCommand : IRequest<Manga>
+public sealed class UpdateMangaCommand : MangaCommandBase
 {
     public int Id { get; set; }
-    public string? Title { get; set; }
-    public decimal Price { get; set; }
-    public IEnumerable<MangaGenres> Genres { get; set; } = [];
-    public DateTime ReleaseDate { get; set; }
-    public string? Publisher { get; set; }
-    public bool? IsActive { get; set; }
-    public DateTime UpdatedAt { get; set; }
+
+    public class UpdateMangaCommandHandler : IRequestHandler<UpdateMangaCommand, Manga>
+    {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public UpdateMangaCommandHandler(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task<Manga> Handle(UpdateMangaCommand request, CancellationToken cancellationToken)
+        {
+            var manga = await _unitOfWork.MangaRepository.GetById(request.Id);
+            manga.Update(
+                request.Title!,
+                request.Price,
+                request.Genres,
+                request.ReleaseDate,
+                request.Publisher!,
+                request.IsActive
+                );
+            manga.UpdatedAt = DateTime.UtcNow;
+
+            _unitOfWork.MangaRepository.Update(manga);
+            await _unitOfWork.CommitAsync();
+
+            return manga;
+        }
+    }
 }

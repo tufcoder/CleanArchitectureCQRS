@@ -1,16 +1,36 @@
-﻿using CleanArchCQRS.Domain.Models;
-using CleanArchCQRS.Domain.Models.Enums;
+﻿using CleanArchCQRS.Domain.Abstractions;
+using CleanArchCQRS.Domain.Models;
 
 using MediatR;
 
 namespace CleanArchCQRS.Application.Mangas.Commands;
 
-public sealed class CreateMangaCommand : IRequest<Manga>
+public sealed class CreateMangaCommand : MangaCommandBase
 {
-    public string? Title { get; set; }
-    public decimal Price { get; set; }
-    public IEnumerable<MangaGenres> Genres { get; set; } = [];
-    public DateTime ReleaseDate { get; set; }
-    public string? Publisher { get; set; }
-    public bool? IsActive { get; set; }
+    public class CreateMangaCommandHandler : IRequestHandler<CreateMangaCommand, Manga>
+    {
+        private readonly IUnitOfWork _unitOfWork;
+
+        public CreateMangaCommandHandler(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task<Manga> Handle(CreateMangaCommand request, CancellationToken cancellationToken)
+        {
+            var manga = new Manga(
+                request.Title!,
+                request.Price,
+                request.Genres,
+                request.ReleaseDate,
+                request.Publisher!,
+                request.IsActive
+                );
+
+            await _unitOfWork.MangaRepository.Add(manga);
+            await _unitOfWork.CommitAsync();
+
+            return manga;
+        }
+    }
 }

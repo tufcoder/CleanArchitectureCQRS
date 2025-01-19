@@ -5,7 +5,7 @@ using MediatR;
 
 namespace CleanArchCQRS.Application.Mangas.Commands;
 
-public class DeleteMangaCommand : IRequest<Manga>
+public sealed class DeleteMangaCommand : IRequest<Manga>
 {
     public int Id { get; set; }
 
