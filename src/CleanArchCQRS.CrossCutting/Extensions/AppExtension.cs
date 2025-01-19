@@ -20,6 +20,9 @@ public static class AppExtension
         services.AddScoped<IMangaRepository, MangaRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+        var myHandlers = AppDomain.CurrentDomain.Load("CleanArchCQRS.Application");
+        services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblies(myHandlers));
+
         return services;
     }
 }

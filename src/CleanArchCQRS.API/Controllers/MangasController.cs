@@ -1,5 +1,8 @@
-﻿using CleanArchCQRS.Domain.Abstractions;
+﻿using CleanArchCQRS.Application.Mangas.Commands;
+using CleanArchCQRS.Domain.Abstractions;
 using CleanArchCQRS.Domain.Models;
+
+using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +13,22 @@ namespace CleanArchCQRS.API.Controllers;
 public class MangasController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMediator _mediator;
 
-    public MangasController(IUnitOfWork unitOfWork)
+    //public MangasController(IUnitOfWork unitOfWork)
+    //{
+    //    _unitOfWork = unitOfWork;
+    //}
+
+    //public MangasController(IMediator mediator)
+    //{
+    //    _mediator = mediator;
+    //}
+
+    public MangasController(IUnitOfWork unitOfWork, IMediator mediator)
     {
         _unitOfWork = unitOfWork;
+        _mediator = mediator;
     }
 
     [HttpGet]
@@ -39,44 +54,31 @@ public class MangasController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Add(Manga newManga)
+    public async Task<IActionResult> CreateManga(CreateMangaCommand command)
     {
         try
         {
-            if (newManga is null)
-            {
-                return BadRequest("Invalid manga data.");
-            }
+            var manga = await _mediator.Send(command);
 
-            var manga = await _unitOfWork.MangaRepository.Add(newManga);
-            await _unitOfWork.CommitAsync();
             return CreatedAtAction(nameof(GetById), new { id = manga.Id }, manga);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            return ex is ArgumentNullException ? NotFound() : BadRequest();
+            return BadRequest();
         }
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, Manga updatedManga)
+    public async Task<IActionResult> UpdateManga(int id, UpdateMangaCommand command)
     {
         try
         {
-            var manga = await _unitOfWork.MangaRepository.GetById(id);
-            manga.Update(
-                updatedManga.Title!,
-                updatedManga.Price,
-                updatedManga.Genres,
-                updatedManga.ReleaseDate,
-                updatedManga.Publisher!,
-                updatedManga.IsActive
-                );
-            manga.UpdatedAt = DateTime.UtcNow;
+            command.Id = id;
 
-            _unitOfWork.MangaRepository.Update(manga);
-            await _unitOfWork.CommitAsync();
-            return Ok();
+            var manga = await _mediator.Send(command);
+
+            return Ok(manga);
+
         }
         catch (Exception ex)
         {
@@ -85,18 +87,19 @@ public class MangasController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> DeleteManga(int id)
     {
         try
         {
-            var deletedManga = await _unitOfWork.MangaRepository.DeleteById(id);
+            var command = new DeleteMangaCommand { Id = id };
 
-            await _unitOfWork.CommitAsync();
-            return Ok(deletedManga);
+            var manga = await _mediator.Send(command);
+
+            return Ok(manga);
         }
         catch (Exception ex)
         {
-            return ex is ArgumentNullException ? NotFound() : BadRequest();
+            return ex is InvalidOperationException ? NotFound() : BadRequest();
         }
     }
 }
