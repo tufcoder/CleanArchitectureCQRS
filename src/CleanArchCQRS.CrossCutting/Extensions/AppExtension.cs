@@ -20,7 +20,7 @@ public static class AppExtension
     public static IServiceCollection AddInfrastructure(this IServiceCollection services,
         IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var connectionString = configuration["SQL_SERVER_CONNECTION_STRING"];
 
         services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
