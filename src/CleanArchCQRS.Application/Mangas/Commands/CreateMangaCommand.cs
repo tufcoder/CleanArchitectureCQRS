@@ -1,8 +1,6 @@
 ﻿using CleanArchCQRS.Domain.Abstractions;
 using CleanArchCQRS.Domain.Models;
 
-using FluentValidation;
-
 using MediatR;
 
 namespace CleanArchCQRS.Application.Mangas.Commands;

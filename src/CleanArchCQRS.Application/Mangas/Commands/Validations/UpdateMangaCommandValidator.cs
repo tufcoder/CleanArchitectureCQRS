@@ -2,9 +2,9 @@
 
 namespace CleanArchCQRS.Application.Mangas.Commands.Validations;
 
-public class CreateMangaCommandValidator : AbstractValidator<CreateMangaCommand>
+public class UpdateMangaCommandValidator : AbstractValidator<UpdateMangaCommand>
 {
-    public CreateMangaCommandValidator()
+    public UpdateMangaCommandValidator()
     {
         RuleFor(p => p.Title)
             .NotEmpty().WithMessage("Please ensure you have entered the Title")

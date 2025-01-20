@@ -21,6 +21,7 @@ public sealed class UpdateMangaCommand : MangaCommandBase
         public async Task<Manga> Handle(UpdateMangaCommand request, CancellationToken cancellationToken)
         {
             var manga = await _unitOfWork.MangaRepository.GetById(request.Id);
+
             manga.Update(
                 request.Title!,
                 request.Price,
