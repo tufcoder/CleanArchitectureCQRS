@@ -1,4 +1,5 @@
-﻿using CleanArchCQRS.Domain.Abstractions;
+﻿using CleanArchCQRS.Application.Mangas.Commands.Notifications;
+using CleanArchCQRS.Domain.Abstractions;
 using CleanArchCQRS.Domain.Models;
 
 using MediatR;
@@ -10,10 +11,12 @@ public sealed class CreateMangaCommand : MangaCommandBase
     public class CreateMangaCommandHandler : IRequestHandler<CreateMangaCommand, Manga>
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMediator _mediator;
 
-        public CreateMangaCommandHandler(IUnitOfWork unitOfWork)
+        public CreateMangaCommandHandler(IUnitOfWork unitOfWork, IMediator mediator)
         {
             _unitOfWork = unitOfWork;
+            _mediator = mediator;
         }
 
         public async Task<Manga> Handle(CreateMangaCommand request, CancellationToken cancellationToken)
@@ -29,6 +32,8 @@ public sealed class CreateMangaCommand : MangaCommandBase
 
             await _unitOfWork.MangaRepository.Add(manga);
             await _unitOfWork.CommitAsync();
+
+            await _mediator.Publish(new MangaCreatedNotification(manga), cancellationToken);
 
             return manga;
         }
