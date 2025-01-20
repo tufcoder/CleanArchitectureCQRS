@@ -3,6 +3,7 @@
 using CleanArchCQRS.Domain.Abstractions;
 using CleanArchCQRS.Infrastructure.Context;
 using CleanArchCQRS.Infrastructure.Repositories;
+using CleanArchCQRS.Application.Mangas.Commands.Validations;
 
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +36,11 @@ public static class AppExtension
         services.AddScoped<IMangaDapperRepository, MangaDapperRepository>();
 
         var myHandlers = AppDomain.CurrentDomain.Load("CleanArchCQRS.Application");
-        services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblies(myHandlers));
+        services.AddMediatR(configuration =>
+        {
+            configuration.RegisterServicesFromAssemblies(myHandlers);
+            configuration.AddOpenBehavior(typeof(ValidationBehaviour<,>));
+        });
 
         services.AddValidatorsFromAssembly(Assembly.Load("CleanArchCQRS.Application"));
 
