@@ -1,3 +1,4 @@
+using CleanArchCQRS.API.Filters;
 using CleanArchCQRS.CrossCutting.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.AddMvc(options => options.Filters.Add(new CustomExceptionFilter()));
 
 var app = builder.Build();
 

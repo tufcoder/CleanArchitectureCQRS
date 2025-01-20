@@ -39,50 +39,28 @@ public class MangasController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateManga(CreateMangaCommand command)
     {
-        try
-        {
-            var manga = await _mediator.Send(command);
+        var manga = await _mediator.Send(command);
 
-            return CreatedAtAction(nameof(GetMangasById), new { id = manga.Id }, manga);
-        }
-        catch (Exception)
-        {
-            return BadRequest();
-        }
+        return CreatedAtAction(nameof(GetMangasById), new { id = manga.Id }, manga);
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateManga(int id, UpdateMangaCommand command)
     {
-        try
-        {
-            command.Id = id;
+        command.Id = id;
 
-            var manga = await _mediator.Send(command);
+        var manga = await _mediator.Send(command);
 
-            return Ok(manga);
-
-        }
-        catch (Exception ex)
-        {
-            return ex is InvalidOperationException ? NotFound() : BadRequest();
-        }
+        return Ok(manga);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteManga(int id)
     {
-        try
-        {
-            var command = new DeleteMangaCommand { Id = id };
+        var command = new DeleteMangaCommand { Id = id };
 
-            var manga = await _mediator.Send(command);
+        var manga = await _mediator.Send(command);
 
-            return Ok(manga);
-        }
-        catch (Exception ex)
-        {
-            return ex is InvalidOperationException ? NotFound() : BadRequest();
-        }
+        return Ok(manga);
     }
 }

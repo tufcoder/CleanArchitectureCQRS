@@ -6,9 +6,11 @@ using CleanArchCQRS.Infrastructure.Repositories;
 
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
+using FluentValidation;
+using System.Reflection;
 
 namespace CleanArchCQRS.CrossCutting.Extensions;
 
@@ -34,6 +36,8 @@ public static class AppExtension
 
         var myHandlers = AppDomain.CurrentDomain.Load("CleanArchCQRS.Application");
         services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblies(myHandlers));
+
+        services.AddValidatorsFromAssembly(Assembly.Load("CleanArchCQRS.Application"));
 
         return services;
     }
