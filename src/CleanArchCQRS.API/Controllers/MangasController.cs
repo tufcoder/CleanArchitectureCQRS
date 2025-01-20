@@ -1,6 +1,5 @@
 ﻿using CleanArchCQRS.Application.Mangas.Commands;
-using CleanArchCQRS.Domain.Abstractions;
-using CleanArchCQRS.Domain.Models;
+using CleanArchCQRS.Application.Mangas.Queries;
 
 using MediatR;
 
@@ -12,45 +11,29 @@ namespace CleanArchCQRS.API.Controllers;
 [ApiController]
 public class MangasController : ControllerBase
 {
-    private readonly IUnitOfWork _unitOfWork;
     private readonly IMediator _mediator;
 
-    //public MangasController(IUnitOfWork unitOfWork)
-    //{
-    //    _unitOfWork = unitOfWork;
-    //}
-
-    //public MangasController(IMediator mediator)
-    //{
-    //    _mediator = mediator;
-    //}
-
-    public MangasController(IUnitOfWork unitOfWork, IMediator mediator)
+    public MangasController(IMediator mediator)
     {
-        _unitOfWork = unitOfWork;
         _mediator = mediator;
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetMangas()
     {
-        var mangas = await _unitOfWork.MangaRepository.GetAll();
-        return mangas is null ? NotFound() : Ok(mangas);
+        var query = new GetMangasQuery();
+        var mangas = await _mediator.Send(query);
+
+        return mangas is null ? NoContent() : Ok(mangas);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetMangasById(int id)
     {
-        try
-        {
-            var manga = await _unitOfWork.MangaRepository.GetById(id);
+        var query = new GetMangasByIdQuery { Id = id };
+        var manga = await _mediator.Send(query);
 
-            return Ok(manga);
-        }
-        catch (Exception ex)
-        {
-            return ex is InvalidOperationException ? NotFound() : BadRequest();
-        }
+        return manga is null ? NotFound() : Ok(manga);
     }
 
     [HttpPost]
@@ -60,7 +43,7 @@ public class MangasController : ControllerBase
         {
             var manga = await _mediator.Send(command);
 
-            return CreatedAtAction(nameof(GetById), new { id = manga.Id }, manga);
+            return CreatedAtAction(nameof(GetMangasById), new { id = manga.Id }, manga);
         }
         catch (Exception)
         {

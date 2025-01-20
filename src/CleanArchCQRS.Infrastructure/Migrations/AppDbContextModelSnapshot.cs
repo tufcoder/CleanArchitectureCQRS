@@ -38,10 +38,6 @@ namespace CleanArchCQRS.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.PrimitiveCollection<string>("Genres")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -73,7 +69,6 @@ namespace CleanArchCQRS.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Genres = "[0]",
                             IsActive = true,
                             Price = 9.99m,
                             Publisher = "Shueisha",
@@ -83,7 +78,6 @@ namespace CleanArchCQRS.Infrastructure.Migrations
                         new
                         {
                             Id = 2,
-                            Genres = "[0,4]",
                             IsActive = false,
                             Price = 7.99m,
                             Publisher = "Shueisha",
@@ -93,7 +87,6 @@ namespace CleanArchCQRS.Infrastructure.Migrations
                         new
                         {
                             Id = 3,
-                            Genres = "[0,5,6]",
                             IsActive = true,
                             Price = 5.99m,
                             Publisher = "Kodansha",

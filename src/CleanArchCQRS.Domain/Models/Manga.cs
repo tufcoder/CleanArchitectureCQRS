@@ -12,6 +12,11 @@ public sealed class Manga : Entity
     public string? Publisher { get; set; }
     public bool? IsActive { get; set; }
 
+    private Manga()
+    {
+        
+    }
+
     public Manga(string title, decimal price, IEnumerable<MangaGenres> genres, DateTime releaseDate, string publisher, bool? isActive)
     {
         ValidateDomain(title, price, genres, releaseDate, publisher, isActive);

@@ -2,6 +2,7 @@
 using CleanArchCQRS.Domain.Models.Enums;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace CleanArchCQRS.Infrastructure.Configurations;
@@ -13,12 +14,16 @@ public class MangaConfiguration : IEntityTypeConfiguration<Manga>
         builder.HasKey(p => p.Id);
         builder.Property(p => p.Title).HasMaxLength(100).IsRequired();
         builder.Property(p => p.Price).HasPrecision(18, 2);
-        builder.Property(p => p.Genres).IsRequired();
+        builder.Property(p => p.Genres)
+            .HasConversion<string>()
+            .IsRequired();
         builder.Property(p => p.ReleaseDate).IsRequired();
         builder.Property(p => p.IsActive).IsRequired();
         builder.Property(p => p.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
         builder.Property(p => p.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
         builder.Property(p => p.DeletedAt).HasDefaultValue(null);
+
+        builder.Ignore(p => p.Genres);
 
         builder.HasData(
             new Manga(
