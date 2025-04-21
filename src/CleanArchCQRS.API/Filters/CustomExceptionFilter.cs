@@ -15,7 +15,7 @@ public class CustomExceptionFilter : IExceptionFilter
 
             var result = new ObjectResult(new { Errors = errors })
             {
-                StatusCode = 400, // Bad Request
+                StatusCode = StatusCodes.Status400BadRequest,
             };
 
             context.Result = result;
@@ -28,7 +28,7 @@ public class CustomExceptionFilter : IExceptionFilter
         }
         else if (context.Exception is HttpRequestException || context.Exception is InvalidOperationException)
         {
-            context.Result = new StatusCodeResult(StatusCodes.Status500InternalServerError); // 500
+            context.Result = new StatusCodeResult(StatusCodes.Status500InternalServerError);
             context.ExceptionHandled = true;
         }
     }

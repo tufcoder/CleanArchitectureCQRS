@@ -1,9 +1,10 @@
-﻿using CleanArchCQRS.Domain.Models.Enums;
+﻿using CleanArchCQRS.Domain.Abstractions;
+using CleanArchCQRS.Domain.Models.Enums;
 using CleanArchCQRS.Domain.Validations;
 
 namespace CleanArchCQRS.Domain.Models;
 
-public sealed class Manga : Entity
+public sealed class Manga : EntityBase
 {
     public string? Title { get; set; }
     public decimal Price { get; set; }

@@ -1,9 +1,8 @@
-﻿namespace CleanArchCQRS.Domain.Models;
+﻿namespace CleanArchCQRS.Domain.Abstractions;
 
-public abstract class Entity
+public abstract class EntityBase
 {
     public int Id { get; protected set; }
     public DateTime? CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
-    public DateTime? DeletedAt { get; set; }
 }

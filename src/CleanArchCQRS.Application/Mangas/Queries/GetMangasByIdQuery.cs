@@ -18,9 +18,10 @@ public sealed class GetMangasByIdQuery : IRequest<Manga>
             _repository = repository;
         }
 
-        public async Task<Manga?> Handle(GetMangasByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Manga> Handle(GetMangasByIdQuery request, CancellationToken cancellationToken)
         {
-            var manga = await _repository.GetMangaById(request.Id);
+            var manga = await _repository.GetMangaByIdAsync(request.Id);
+            
             return manga;
         }
     }

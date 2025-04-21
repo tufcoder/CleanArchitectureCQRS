@@ -14,9 +14,6 @@ public class CreateMangaCommandValidator : AbstractValidator<CreateMangaCommand>
             .GreaterThan(0)
             .NotEmpty().WithMessage("Please ensure you have entered the Price");
 
-        //RuleFor(p => p.Genres)
-        //    .NotEmpty().WithMessage("Please ensure you have entered the Genres");
-
         RuleFor(p => p.ReleaseDate)
             .NotEmpty().WithMessage("Please ensure you have entered the ReleaseDate");
 

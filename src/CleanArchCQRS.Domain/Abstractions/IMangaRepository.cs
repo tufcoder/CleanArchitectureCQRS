@@ -4,9 +4,8 @@ namespace CleanArchCQRS.Domain.Abstractions;
 
 public interface IMangaRepository
 {
-    Task<IEnumerable<Manga>> GetAll();
-    Task<Manga> GetById(int id);
-    Task<Manga> Add(Manga manga);
+    Task<Manga?> GetByIdAsync(int id);
+    Task<Manga> AddAsync(Manga manga);
     void Update(Manga manga);
-    Task<Manga> DeleteById(int id);
+    Task<Manga?> DeleteByIdAsync(int id);
 }

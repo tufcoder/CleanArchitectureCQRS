@@ -1,9 +1,9 @@
-﻿using System.Data;
-
-using CleanArchCQRS.Domain.Abstractions;
+﻿using CleanArchCQRS.Domain.Abstractions;
 using CleanArchCQRS.Domain.Models;
 
 using Dapper;
+
+using System.Data;
 
 namespace CleanArchCQRS.Infrastructure.Repositories;
 
@@ -16,19 +16,20 @@ public class MangaDapperRepository : IMangaDapperRepository
         _connection = connection;
     }
 
-    public async Task<IEnumerable<Manga>> GetMangas()
+    public async Task<IEnumerable<Manga>> GetMangasAsync()
     {
-        var sql = "SELECT * FROM Mangas";
-        var mangas = await _connection.QueryAsync<Manga>(sql);
+        var query = "SELECT * FROM Mangas";
+        var mangas = await _connection.QueryAsync<Manga>(query);
 
         return mangas;
     }
 
-    public async Task<Manga?> GetMangaById(int id)
+    public async Task<Manga> GetMangaByIdAsync(int id)
     {
-        var sql = "SELECT * FROM Mangas WHERE Id = @Id";
-        var manga = await _connection.QueryFirstOrDefaultAsync<Manga>(sql, new { Id = id });
-        
+        var query = "SELECT * FROM Mangas WHERE Id = @Id";
+        var manga = await _connection.QueryFirstOrDefaultAsync<Manga>(query, new { Id = id })
+            ?? throw new InvalidOperationException("Manga not found");
+
         return manga;
     }
 }

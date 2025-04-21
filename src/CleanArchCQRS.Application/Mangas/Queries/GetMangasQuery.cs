@@ -18,7 +18,7 @@ public sealed class GetMangasQuery : IRequest<IEnumerable<Manga>>
 
         public async Task<IEnumerable<Manga>> Handle(GetMangasQuery request, CancellationToken cancellationToken)
         {
-            var mangas = await _repository.GetMangas();
+            var mangas = await _repository.GetMangasAsync();
             return mangas;
         }
     }

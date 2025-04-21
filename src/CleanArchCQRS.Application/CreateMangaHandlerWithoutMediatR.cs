@@ -24,7 +24,7 @@ public class CreateMangaHandlerWithoutMediatR : ICreateMangaHandler
             command.IsActive
             );
 
-        _repository.Add(manga);
+        _repository.AddAsync(manga);
 
         return new CreateMangaResponse
         {

@@ -9,3 +9,36 @@ GET {{CleanArchCQRS.API_HostAddress}}/mangas/1
 Accept: application/json
 
 ###
+
+DELETE {{CleanArchCQRS.API_HostAddress}}/mangas/4
+Accept: application/json
+
+###
+
+POST {{CleanArchCQRS.API_HostAddress}}/mangas/
+Content-type: application/json
+
+{
+  "title": "DBZ",
+  "price": 12.99,
+  "genres": [0],
+  "releaseDate": "1985-09-10",
+  "publisher": "Shueisha",
+  "isActive": false
+}
+
+###
+
+PUT {{CleanArchCQRS.API_HostAddress}}/mangas/5
+Content-type: application/json
+
+{
+  "title": "DBZ",
+  "price": 12.99,
+  "genres": [0],
+  "releaseDate": "1985-09-10",
+  "publisher": "Shueisha",
+  "isActive": false
+}
+
+###

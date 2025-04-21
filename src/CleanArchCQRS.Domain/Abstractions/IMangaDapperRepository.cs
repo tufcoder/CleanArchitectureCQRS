@@ -4,6 +4,6 @@ namespace CleanArchCQRS.Domain.Abstractions;
 
 public interface IMangaDapperRepository
 {
-    Task<IEnumerable<Manga>> GetMangas();
-    Task<Manga?> GetMangaById(int id);
+    Task<IEnumerable<Manga>> GetMangasAsync();
+    Task<Manga> GetMangaByIdAsync(int id);
 }

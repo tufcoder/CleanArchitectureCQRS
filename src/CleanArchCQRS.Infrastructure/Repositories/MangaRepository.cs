@@ -2,20 +2,25 @@
 using CleanArchCQRS.Domain.Models;
 using CleanArchCQRS.Infrastructure.Context;
 
-using Microsoft.EntityFrameworkCore;
-
 namespace CleanArchCQRS.Infrastructure.Repositories;
 
 public class MangaRepository : IMangaRepository
 {
-    protected readonly AppDbContext _context;
+    private readonly AppDbContext _context;
 
     public MangaRepository(AppDbContext context)
     {
         _context = context;
     }
 
-    public async Task<Manga> Add(Manga manga)
+    public async Task<Manga?> GetByIdAsync(int id)
+    {
+        var manga = await _context.Mangas.FindAsync(id);
+
+        return manga;
+    }
+
+    public async Task<Manga> AddAsync(Manga manga)
     {
         if (manga is null)
             throw new ArgumentNullException(nameof(manga));
@@ -24,25 +29,12 @@ public class MangaRepository : IMangaRepository
         return manga;
     }
 
-    public async Task<IEnumerable<Manga>> GetAll()
+    public async Task<Manga?> DeleteByIdAsync(int id)
     {
-        var mangas = await _context.Mangas.ToListAsync();
-        return mangas ?? Enumerable.Empty<Manga>();
-    }
-
-    public async Task<Manga> GetById(int id)
-    {
-        var manga = await _context.Mangas.FindAsync(id);
+        var manga = await GetByIdAsync(id);
 
         if (manga is null)
-            throw new InvalidOperationException("Manga not found");
-
-        return manga;
-    }
-
-    public async Task<Manga> DeleteById(int id)
-    {
-        var manga = await GetById(id);
+            return null;
 
         _context.Mangas.Remove(manga);
 

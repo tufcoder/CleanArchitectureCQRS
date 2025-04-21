@@ -1,4 +1,5 @@
-﻿using CleanArchCQRS.Application.Mangas.Commands.Notifications;
+﻿using CleanArchCQRS.Application.Abstractions;
+using CleanArchCQRS.Application.Mangas.Commands.Notifications;
 using CleanArchCQRS.Domain.Abstractions;
 using CleanArchCQRS.Domain.Models;
 
@@ -30,7 +31,7 @@ public sealed class CreateMangaCommand : MangaCommandBase
                 request.IsActive
                 );
 
-            await _unitOfWork.MangaRepository.Add(manga);
+            await _unitOfWork.MangaRepository.AddAsync(manga);
             await _unitOfWork.CommitAsync();
 
             await _mediator.Publish(new MangaCreatedNotification(manga), cancellationToken);

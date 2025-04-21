@@ -3,7 +3,7 @@ using CleanArchCQRS.Domain.Models.Enums;
 
 using MediatR;
 
-namespace CleanArchCQRS.Application.Mangas.Commands;
+namespace CleanArchCQRS.Application.Abstractions;
 
 public abstract class MangaCommandBase : IRequest<Manga>
 {

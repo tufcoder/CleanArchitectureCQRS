@@ -20,7 +20,6 @@ public class MangaConfiguration : IEntityTypeConfiguration<Manga>
         builder.Property(p => p.IsActive).IsRequired();
         builder.Property(p => p.CreatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
         builder.Property(p => p.UpdatedAt).HasDefaultValueSql("CURRENT_TIMESTAMP");
-        builder.Property(p => p.DeletedAt).HasDefaultValue(null);
 
         builder.Ignore(p => p.Genres);
 

@@ -9,7 +9,7 @@ public sealed class DeleteMangaCommand : IRequest<Manga>
 {
     public int Id { get; set; }
 
-    public class DeleteMangaCommandHandler : IRequestHandler<DeleteMangaCommand, Manga>
+    public class DeleteMangaCommandHandler : IRequestHandler<DeleteMangaCommand, Manga?>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -18,9 +18,12 @@ public sealed class DeleteMangaCommand : IRequest<Manga>
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Manga> Handle(DeleteMangaCommand request, CancellationToken cancellationToken)
+        public async Task<Manga?> Handle(DeleteMangaCommand request, CancellationToken cancellationToken)
         {
-            var manga = await _unitOfWork.MangaRepository.DeleteById(request.Id);
+            var manga = await _unitOfWork.MangaRepository.DeleteByIdAsync(request.Id);
+
+            if (manga is null)
+                return null;
 
             await _unitOfWork.CommitAsync();
 

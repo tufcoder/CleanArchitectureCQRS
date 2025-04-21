@@ -1,21 +1,18 @@
-﻿using System.Data;
-
-using CleanArchCQRS.Domain.Abstractions;
+﻿using CleanArchCQRS.Domain.Abstractions;
 using CleanArchCQRS.Infrastructure.Context;
 using CleanArchCQRS.Infrastructure.Repositories;
 using CleanArchCQRS.Application.Mangas.Commands.Validations;
-
+using FluentValidation;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-using FluentValidation;
+using System.Data;
 using System.Reflection;
 
 namespace CleanArchCQRS.CrossCutting.Extensions;
 
-public static class AppExtension
+public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services,
         IConfiguration configuration)

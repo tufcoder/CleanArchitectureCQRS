@@ -51,7 +51,7 @@ public class MangasController : ControllerBase
 
         var manga = await _mediator.Send(command);
 
-        return Ok(manga);
+        return manga is null ? NotFound() : Ok(manga);
     }
 
     [HttpDelete("{id}")]
@@ -61,6 +61,6 @@ public class MangasController : ControllerBase
 
         var manga = await _mediator.Send(command);
 
-        return Ok(manga);
+        return manga is null ? NotFound() : Ok(manga);
     }
 }

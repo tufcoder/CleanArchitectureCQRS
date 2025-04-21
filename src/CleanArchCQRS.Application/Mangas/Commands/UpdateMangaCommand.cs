@@ -1,4 +1,5 @@
-﻿using CleanArchCQRS.Domain.Abstractions;
+﻿using CleanArchCQRS.Application.Abstractions;
+using CleanArchCQRS.Domain.Abstractions;
 using CleanArchCQRS.Domain.Models;
 
 using MediatR;
@@ -9,7 +10,7 @@ public sealed class UpdateMangaCommand : MangaCommandBase
 {
     public int Id { get; set; }
 
-    public class UpdateMangaCommandHandler : IRequestHandler<UpdateMangaCommand, Manga>
+    public class UpdateMangaCommandHandler : IRequestHandler<UpdateMangaCommand, Manga?>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -18,9 +19,12 @@ public sealed class UpdateMangaCommand : MangaCommandBase
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Manga> Handle(UpdateMangaCommand request, CancellationToken cancellationToken)
+        public async Task<Manga?> Handle(UpdateMangaCommand request, CancellationToken cancellationToken)
         {
-            var manga = await _unitOfWork.MangaRepository.GetById(request.Id);
+            var manga = await _unitOfWork.MangaRepository.GetByIdAsync(request.Id);
+
+            if (manga is null)
+                return null;
 
             manga.Update(
                 request.Title!,
